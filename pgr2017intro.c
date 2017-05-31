@@ -206,7 +206,7 @@ const char *demo_strings[] =
 	"SANS OUBLIER ...\0",
 	"LA MAIRIE DE PINON :) !\0",
 	
-	"LE TEXTE VA RECOMMENCER ...\0",
+	//"LE TEXTE VA RECOMMENCER ...\0",
 	" \0",
 	/*	Do not remove the next line */
 	"\0"
@@ -489,7 +489,7 @@ int main(void) {
 	
 	// Init vars
 	figure_counter = 0;
-	figure_mode=8; // 0;
+	figure_mode=0;
 	demo_phase = 0;
 	phase_counter = 0;
 	writer_switch = 0;
@@ -513,7 +513,6 @@ int main(void) {
 				if (phase_counter > 32 + 16) {
 					phase_counter = 0;
 					demo_phase++;
-					//VDP_fadePalTo(PAL2, donut.palette->data, 32, TRUE);
 				}
 				break;
 			case 2:
@@ -521,13 +520,12 @@ int main(void) {
 				if (phase_counter > 32 + 16) {
 					phase_counter = 0;
 					demo_phase++;
-					//VDP_fadePalTo(PAL0, vip_logo.palette->data, 32, TRUE);					
 				}
 				break;
 		}
 
 		// do starfiled and sprites only for some cases
-		if (figure_mode<9) {
+		if (figure_mode<13) {
 			// update text if possible
 			if (demo_phase > 2) {
 				if ( (writer_switch!=0) || (writer_state == WRT_CLEAR_LINE) )
@@ -540,7 +538,6 @@ int main(void) {
 			ptscr=(u8 *) &(scroll_bg2+1);
 			ptspd=(u8 *) &scroll_speed;
 			for(i = 0; i < TABLE_LEN; i++) {
-				//scroll_bg2[i*3+1] = (scroll_bg2[i*3+1] + scroll_speed[i]) & 0xFF;
 				*ptscr=(*ptscr+*ptspd) & 0xFF;
 				ptspd++;
 				ptscr=ptscr+3;
@@ -550,45 +547,40 @@ int main(void) {
 			for(i = 0; i < MAX_SPRITES; i++) {
 				switch(figure_mode) {
 					case 0:
+					case 9:
 						oamSetAttr(i<<2, (cosFix16(s + (i << 5)) << 1) + 128 - 16, sinFix16(s + (i << 5)) + 112 - 16, sprIdx[(( i) & 7)], 2<<4);
-						//oamSetXY(i<<2, (cosFix16(s + (i << 5)) << 1) + 128 - 16, sinFix16(s + (i << 5)) + 112 - 16);
 						break;
 					case 1:
+					case 10:
 						oamSetAttr(i<<2, (cosFix16(s + (i << 6)) << 1) + 128 - 16, (sinFix16(s + (i << 5))) + 112 - 16, sprIdx[((( i) & 7))+8], (1<<1) | (2<<4));
-						//oamSetXY(i<<2, (cosFix16(s + (i << 6)) << 1) + 128 - 16, (sinFix16(s + (i << 5))) + 112 - 16);
 						break;
 					case 2:
+					case 11:
 						oamSetAttr(i<<2, ((sinFix16((s << 1) + (i << 6))) << 1) + 128 - 16, (cosFix16(s + (i << 5)) << 1) + 112 - 16, sprIdx[(( i) & 7)], 2<<4);
-						//oamSetXY(i<<2, ((sinFix16((s << 1) + (i << 6))) << 1) + 128 - 16, (cosFix16(s + (i << 5)) << 1) + 112 - 16);
 						break;
 					case 3:
+					case 12:
 						oamSetAttr(i<<2, (sinFix16(s + (i << 7))) + 128 - 16, (cosFix16((s >> 1) + (i << 4)) << 1) + 112 - 16, sprIdx[((( i) & 7))+8], (1<<1) | (2<<4));
-						//oamSetXY(i<<2, (sinFix16(s + (i << 7))) + 128 - 16, (cosFix16((s >> 1) + (i << 4)) << 1) + 112 - 16);
 						break;
 					case 4:
 						oamSetAttr(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16, sprIdx[(( i) & 7)], 2<<4);
-						//oamSetXY(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16);
 						break;
 					case 5:
 						oamSetAttr(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16, sprIdx[((( i) & 7))+8], (1<<1) | (2<<4));
-						//oamSetXY(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16);
 						break;
 					case 6:
 						oamSetAttr(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16, sprIdx[(( i) & 7)], 2<<4);
-						//oamSetXY(i<<2, (cosFix16((s << 1) + (i << 5)) << 1) + 128 - 16, (sinFix16((s >> 1) + (i << 5)) << 1) + 112 - 16);
 						break;
 					case 7:
 						oamSetAttr(i<<2, ((sinFix16((s << 1) + (i << 6))) << 1) + 128 - 16, (cosFix16(s + (i << 5)) << 1) + 112 - 16, sprIdx[((( i) & 7))+8], (1<<1) | (2<<4));
-						//oamSetXY(i<<2, ((sinFix16((s << 1) + (i << 6))) << 1) + 128 - 16, (cosFix16(s + (i << 5)) << 1) + 112 - 16);
 						break;
 					case 8:
 						oamSetAttr(i<<2, (cosFix16(s + (i << 6)) << 1) + 128 - 16, (sinFix16(s + (i << 5))) + 112 - 16, sprIdx[(( i) & 7)], 2<<4);
-						//oamSetXY(i<<2, (cosFix16(s + (i << 6)) << 1) + 128 - 16, (sinFix16(s + (i << 5))) + 112 - 16);
 						break;
 				}
 			}
 		}
-		if (figure_mode==9) {
+		if (figure_mode==13) {
 			setFadeEffect(FADE_OUT);
 			spcProcess();	setBrightness(0); // Force VBlank
 			for(i = 0; i < MAX_SPRITES; i++) {
@@ -599,26 +591,26 @@ int main(void) {
 			dmaCopyVram(&firstonesm, MAP0ADR, 32*32*2);
 			figure_counter=640; // to go quickly to next step
 		}
-		else if (figure_mode==10) {
+		else if (figure_mode==14) {
 			// display 1st event with a mosaic effect
 			setFadeEffect(FADE_IN);
 			figure_counter=640; // to go quickly to next step
 		}
-		else if (figure_mode==12) {
+		else if (figure_mode==16) {
 			// display last event with a mosaic effect
 			setFadeEffect(FADE_OUT);
 			spcProcess();	setBrightness(0); // Force VBlank
 			dmaCopyVram(&lastonesg, GFXMAP0ADR, (&lastonesg_end-&lastonesg));
-			dmaCopyCGram(&lastonesp, 2 * 16, 16*2);
+			dmaCopyCGram(&lastonesp, 2 * 16, 16*2*2);
 			dmaCopyVram(&lastonesm, MAP0ADR, 32*32*2);
 			figure_counter=640; // to go quickly to next step
 		}
-		else if (figure_mode==13) {
+		else if (figure_mode==17) {
 			// display last event with a mosaic effect
 			setFadeEffect(FADE_IN);
 			figure_counter=640; // to go quickly to next step
 		}
-		else if (figure_mode==15) {
+		else if (figure_mode==19) {
 			// display last event with a mosaic effect
 			setFadeEffect(FADE_OUT);
 			spcProcess();	setBrightness(0); // Force VBlank
@@ -634,7 +626,7 @@ int main(void) {
 		figure_counter++;
 		if (figure_counter > 640) {
 			figure_mode++;
-			if (figure_mode > 15) figure_mode = 0;
+			if (figure_mode > 19) { figure_mode = 0; setFadeEffect(FADE_IN); }
 			figure_counter = 0;
 		}	
 		
