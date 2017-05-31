@@ -106,7 +106,7 @@ gfxs/firstone.pic: gfxs/firstone.bmp
 
 gfxs/lastone.pic: gfxs/lastone.bmp
 	@echo first meeting bitmap ... $(notdir $@)
-	$(GFXCONV) -po16 -pc16 -n -gs8 -pe2 -m $<
+	$(GFXCONV) -po32 -pc16 -n -gs8 -pe2 -m $<
 	
 bitmaps : gfxs/fonts.pic gfxs/stars.pic gfxs/logo.pic gfxs/sprites.pic gfxs/firstone.pic gfxs/lastone.pic
 
